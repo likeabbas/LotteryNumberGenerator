@@ -44,12 +44,15 @@ fn main() {
 fn generate_mega_millions_numbers() {
     let mut rng = OsRng;
 
-    let mut numbers = HashSet::new();
+    let mut white_balls = (1..=70).collect::<HashSet<u32>>();
+    let mut numbers = Vec::new();
     while numbers.len() < 5 {
-        numbers.insert(rng.gen_range(1..=70));
+	let number = rng.gen_range(1..=white_balls.len()) as u32;
+	let &number = white_balls.iter().nth((number - 1) as usize).unwrap();
+        white_balls.remove(&number);
+        numbers.push(number);
     }
 
-    let mut numbers = numbers.into_iter().collect::<Vec<u32>>();
     numbers.sort();
 
     let mega_ball = rng.gen_range(1..=25);
